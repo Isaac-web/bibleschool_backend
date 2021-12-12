@@ -6,6 +6,11 @@ const createUser = async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
+  const existingUser = await User.findOne({ email: req.body.email });
+  if (existingUser) return res.status("Username is already taken");
+
+  const users = await User.find();
+
   const user = new User(
     _.pick(req.body, ["firstname", "lastname", "email", "address", "mobile"])
   );
@@ -13,6 +18,8 @@ const createUser = async (req, res) => {
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
   user.password = hashedPassword;
+
+  if (!users.length) user.status = "admin";
 
   await user.save();
 
