@@ -89,8 +89,17 @@ const validateOnUpdate = (enrollment) => {
   return schema.validate(enrollment);
 };
 
+
+const getCoordinatorEnrollments = async (req, res) => {
+  const enrollments = await Enrollment.find({
+    course: req.params.courseId,
+  }).populate("course", "title");
+  res.send(enrollments);
+};
+
 exports.createEnrollment = createEnrollment;
 exports.getEnrollments = getEnrollments;
+exports.getCoordinatorEnrollments = getCoordinatorEnrollments;
 exports.getUserEnrollments = getUserEnrollments;
 exports.updateEnrollment = updateEnrollment;
 exports.deleteEnrollment = deleteEnrollment;
