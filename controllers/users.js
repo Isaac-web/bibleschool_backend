@@ -7,7 +7,7 @@ const createUser = async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const existingUser = await User.findOne({ email: req.body.email });
-  if (existingUser) return res.status("Username is already taken");
+  if (existingUser) return res.status("Username is already taken.");
 
   const users = await User.find();
 

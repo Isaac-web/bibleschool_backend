@@ -6,8 +6,10 @@ module.exports = (req, res, next) => {
   if (!token) return res.status(401).send("Access denied. No token provided.");
 
   const decoded = jwt.verify(token, config.get("jwtPrivateKey"));
-  if (decoded.status !== "coordinator" || decoded.status !== "admin")
+  
+  if (decoded.status !== "coordinator" && decoded.status !== "admin") {
     return res.status(403).send("Access Denied.");
+  }
 
   next();
 };
