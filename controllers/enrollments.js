@@ -3,7 +3,7 @@ const Joi = require("joi");
 const { Enrollment, validate } = require("../models/Enrollment");
 const { Course } = require("../models/Course");
 const { Module } = require("../models/Module");
-const { first } = require("lodash");
+
 
 const createEnrollment = async (req, res) => {
   const { error } = validate(req.body);
@@ -32,6 +32,9 @@ const createEnrollment = async (req, res) => {
   });
 
   await enrollment.save();
+
+  course.enrollments++;
+  await course.save();
 
   res.send(enrollment);
 };
