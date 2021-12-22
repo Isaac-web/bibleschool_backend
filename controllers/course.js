@@ -35,7 +35,7 @@ const createCourse = async (req, res) => {
 const getCourses = async (req, res) => {
   const courses = await Course.find().populate(
     "coordinator",
-    "firstname lastname status"
+    "firstname lastname status email"
   );
 
   res.send(courses);
@@ -44,7 +44,7 @@ const getCourses = async (req, res) => {
 const getCourse = async (req, res) => {
   const course = await Course.findById(req.params.id).populate(
     "coordinator",
-    "firstname lastname status"
+    "firstname lastname status email address"
   );
 
   if (!course) return res.status(404).send("Course not found.");
