@@ -17,6 +17,18 @@ const upload = multer({
   limits: { fileSize: 1024 * 1024 * 30 },
 });
 
+
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/images/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const imageUpload = multer({ storage: imageStorage, limits: 1024 * 1024 * 10 });
+
 const {
   createModule,
   getModules,
@@ -26,6 +38,7 @@ const {
   deleteModuleQuestion,
   downloadModule,
   uploadFile,
+  uploadBackgroundImage,
 } = require("../controllers/modules");
 const validateId = require("../middleware/validateId");
 const auth = require("../middleware/auth");
@@ -40,6 +53,11 @@ router.patch(
   "/upload/:id",
   [validateId, coordinator, upload.single("fileUpload")],
   asyncMiddleware(uploadFile)
+);
+router.patch(
+  "/background/:id",
+  [imageUpload.single("imageUpload")],
+  asyncMiddleware(uploadBackgroundImage)
 );
 router.patch("/:id", [validateId, coordinator], asyncMiddleware(updateModule));
 router.delete("/:id", [validateId, coordinator], asyncMiddleware(deleteModule));

@@ -52,7 +52,7 @@ const getUserEnrollments = async (req, res, next) => {
 
   const enrollments = await Enrollment.find({ userId }).populate(
     "course",
-    "title imageUri"
+    "title imageUri, progress"
   );
 
   res.send(enrollments);

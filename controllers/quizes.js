@@ -6,6 +6,7 @@ const markQuiz = async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
+
   const quizQuestions = req.body.questions;
 
   const module = await Module.findById(req.body.moduleId);
@@ -22,15 +23,17 @@ const markQuiz = async (req, res) => {
   const score = correctAnswers.length / questions.length;
 
   let nextModule;
-  let enrollment = await Enrollment.findById(req.body.enrollmentId);
+  let enrollment = await Enrollment.findById(req.body.enrollmentId).populate(
+    "course"
+  );
 
   const totalModules = await Module.find({
-    course: enrollment.course.toHexString(),
+    course: enrollment.course._id,
   }).count();
 
   if (score >= 0.7) {
     const modules = await Module.find({
-      course: enrollment.course.toHexString(),
+      course: enrollment.course._id,
     });
 
     const index = modules.findIndex((m) => m._id == req.body.moduleId);
@@ -42,7 +45,8 @@ const markQuiz = async (req, res) => {
     const progress = enrollment.coveredModules.length / totalModules;
     enrollment.progress = progress.toFixed(2) * 100;
 
-    if (Math.round(progress) === 100) enrollment.status = "complete";
+    if (enrollment.coveredModules.length === totalModules)
+      enrollment.status = "complete";
     enrollment.save();
   }
 

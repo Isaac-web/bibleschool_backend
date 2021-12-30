@@ -76,6 +76,23 @@ const uploadFile = async (req, res) => {
   res.download(path.join(__dirname + "/..", req.file.path));
 };
 
+
+const uploadBackgroundImage = async (req, res) => {
+  if (!req.file) return res.status(400).send("Please provide a valid file.");
+
+  const module = await Module.findByIdAndUpdate(
+    req.params.id,
+    {
+      $set: {
+        imageUri: req.file.path,
+      },
+    },
+    { new: true }
+  );
+
+  res.send(module);
+};
+
 const downloadModule = async (req, res) => {
   const { path: filePath } = req.query;
   res.download(path.join(__dirname + "/..", filePath));
@@ -111,6 +128,7 @@ module.exports.getModules = getModules;
 module.exports.getModule = getModule;
 module.exports.updateModule = updateModule;
 module.exports.uploadFile = uploadFile;
+module.exports.uploadBackgroundImage = uploadBackgroundImage;
 module.exports.downloadModule = downloadModule;
 module.exports.deleteModule = deleteModule;
 module.exports.deleteModuleQuestion = deleteModuleQuestion;

@@ -1,5 +1,6 @@
 {
   "db": "",
   "jwtPrivateKey": "",
-  "disableAuth": true
+  "disableAuth": false,
+  "enableWinstonConsole": false
 }

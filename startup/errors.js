@@ -3,7 +3,8 @@ const config = require("config");
 
 module.exports = () =>
   winston.add(new winston.transports.File({ filename: "./logs/error.log" }));
-  winston.add(new winston.transports.Console({}));
+  if (config.get("enableWinstonConsole"))
+    winston.add(new winston.transports.Console({}));
 
   process.on("uncaughtException", (err) => {
     winston.error(err.message, err);

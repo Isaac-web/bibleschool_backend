@@ -82,9 +82,10 @@ const validate = (user) => {
     firstname: Joi.string().min(3).max(100).required(),
     lastname: Joi.string().min(3).max(100).required(),
     email: Joi.string().email().required().required(),
-    mobile: Joi.string().min(10).max(10).required(),
+    mobile: Joi.string().length(10).required(),
     address: Joi.string().min(3).max(150).required(),
     password: Joi.string().min(7).max(150).required(),
+    confirmPassword: Joi.string().min(7).max(150).required(),
   });
 
   return schema.validate(user);
