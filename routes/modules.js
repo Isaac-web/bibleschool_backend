@@ -56,7 +56,7 @@ router.patch(
 );
 router.patch(
   "/background/:id",
-  [imageUpload.single("imageUpload")],
+  [validateId, coordinator, imageUpload.single("imageUpload")],
   asyncMiddleware(uploadBackgroundImage)
 );
 router.patch("/:id", [validateId, coordinator], asyncMiddleware(updateModule));

@@ -25,6 +25,12 @@ const Course = mongoose.model(
       min: 0,
       default: 0,
     },
+    createdAt: {
+      type: Date,
+      default: function () {
+        return Date.now();
+      },
+    },
   })
 );
 

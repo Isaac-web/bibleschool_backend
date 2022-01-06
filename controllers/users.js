@@ -87,12 +87,10 @@ const removeAdmin = async (req, res) => {
 };
 
 const searchUser = async (req, res) => {
-  const { searchQuery } = req.query;
+  const { username } = req.query;
 
-  const search = new RegExp(searchQuery, "i");
-  const users = await User.find()
-    .or([{ firstname: search }, { lastname: search }])
-    .select("-password");
+  const search = new RegExp(username, "i");
+  const users = await User.find({ email: search }).select("-password");
 
   res.send(users);
 };

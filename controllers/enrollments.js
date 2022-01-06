@@ -25,6 +25,8 @@ const createEnrollment = async (req, res) => {
   if (!firstModule)
     return res.status(400).send("Cannot enroll in this course.");
 
+  // console.log("It is working...", firstModule);
+
   const enrollment = new Enrollment({
     user: req.body.userId,
     course: req.body.courseId,
@@ -41,7 +43,7 @@ const createEnrollment = async (req, res) => {
 
 const getEnrollments = async (req, res) => {
   const enrollments = await Enrollment.find()
-    .populate("course", "title")
+    .populate("course", "title imageUri")
     .populate("user");
 
   res.send(enrollments);
@@ -50,9 +52,9 @@ const getEnrollments = async (req, res) => {
 const getUserEnrollments = async (req, res, next) => {
   const { userId } = req.params;
 
-  const enrollments = await Enrollment.find({ userId }).populate(
+  const enrollments = await Enrollment.find({ user: userId }).populate(
     "course",
-    "title imageUri, progress"
+    "title imageUri progress"
   );
 
   res.send(enrollments);
@@ -92,11 +94,12 @@ const validateOnUpdate = (enrollment) => {
   return schema.validate(enrollment);
 };
 
-
 const getCoordinatorEnrollments = async (req, res) => {
   const enrollments = await Enrollment.find({
     course: req.params.courseId,
-  }).populate("course", "title");
+  })
+    .populate("course", "title")
+    .populate("user", "firstname lastname");
   res.send(enrollments);
 };
 

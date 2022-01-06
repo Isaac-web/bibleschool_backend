@@ -11,9 +11,8 @@ const createCourse = async (req, res) => {
   const user = await User.findById(req.body.coordinator);
   if (!user) return res.status(404).send("User not found.");
 
-  const course = new Course(
-    _.pick(req.body, ["title", "coordinator", "imageUri"])
-  );
+  const course = new Course(_.pick(req.body, ["title", "coordinator"]));
+  course.imageUri = req.file.path;
 
   await course.save();
 

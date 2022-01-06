@@ -4,6 +4,8 @@ const _ = require("lodash");
 const path = require("path");
 const multer = require("multer");
 
+const coordinator = require("../middleware/coordinator");
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -73,9 +75,8 @@ const uploadFile = async (req, res) => {
     { new: true }
   );
 
-  res.download(path.join(__dirname + "/..", req.file.path));
+  res.send(module);
 };
-
 
 const uploadBackgroundImage = async (req, res) => {
   if (!req.file) return res.status(400).send("Please provide a valid file.");
