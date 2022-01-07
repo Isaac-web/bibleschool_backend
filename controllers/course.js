@@ -12,7 +12,7 @@ const createCourse = async (req, res) => {
   if (!user) return res.status(404).send("User not found.");
 
   const course = new Course(_.pick(req.body, ["title", "coordinator"]));
-  course.imageUri = req.file.path;
+  if (req.file) course.imageUri = req.file.path;
 
   await course.save();
 
