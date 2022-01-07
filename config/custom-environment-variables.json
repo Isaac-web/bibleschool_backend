@@ -1,0 +1,4 @@
+{
+  "jwtPrivateKey": "app_jwtPrivateKey",
+  "db": "MONGO_DB_URL"
+}

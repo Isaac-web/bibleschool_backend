@@ -1,0 +1,4 @@
+{
+  "db": "mongodb://localhost/bibleschool_app_dev",
+  "enableWinstonConsole": true
+}

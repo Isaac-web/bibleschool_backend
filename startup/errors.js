@@ -19,7 +19,7 @@ module.exports = () =>
   const privateKey = config.get("jwtPrivateKey") || process.env.JWT_PRIVATE_KEY;
   if (!privateKey) {
     console.log(
-      `\x1b[32m%s\x1b[0m]`,
+      `\x1b[31m%s\x1b[0m`,
       "FATAL ERROR: jwtPrivateKey is undefined."
     );
     process.exit(1);
