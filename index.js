@@ -1,8 +1,8 @@
 const express = require("express");
 require("dotenv").config();
+require("express-async-errors");
 
 require("./startup/errors")();
-
 
 const app = express();
 require("./startup/middleware")(app);

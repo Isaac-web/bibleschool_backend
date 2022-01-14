@@ -6,9 +6,6 @@ const createUser = async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  
-  
-
   const existingUser = await User.findOne({ email: req.body.email });
   if (existingUser) return res.status(400).send("Username is already taken.");
 
@@ -38,7 +35,7 @@ const createUser = async (req, res) => {
     .send(
       _.pick(user, ["firstname", "lastname", "email", "address", "mobile"])
     );
-};;
+};
 
 const getUsers = async (req, res) => {
   const users = await User.find().limit(10);
@@ -86,6 +83,14 @@ const removeAdmin = async (req, res) => {
   res.send(user);
 };
 
+const getCurrentUser = async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+
+  if (!user) return res.status(404).send("User not found.");
+
+  res.send(user);
+};
+
 const searchUser = async (req, res) => {
   const { username } = req.query;
 
@@ -102,3 +107,5 @@ exports.getAdmins = getAdmins;
 exports.addAdmin = addAdmin;
 exports.searchUser = searchUser;
 exports.removeAdmin = removeAdmin;
+exports.getCurrentUser = getCurrentUser;
+

@@ -34,12 +34,10 @@ const Module = mongoose.model(
       trim: true,
       required: true,
     },
-    subtitle: {
-      type: String,
-      min: 3,
-      max: 100,
-      trim: true,
-      required: true,
+    content: {
+      type: String, 
+      minlength: 0, 
+      default: "",
     },
     fileUri: {
       type: String,
@@ -57,7 +55,6 @@ function validate(module) {
   const schema = Joi.object({
     courseId: Joi.objectId().required(),
     title: Joi.string().min(3).max(100).required(),
-    subtitle: Joi.string().min(3).max(100).required(),
     fileUri: Joi.string(),
     imageUri: Joi.string(),
     questions: Joi.array(),

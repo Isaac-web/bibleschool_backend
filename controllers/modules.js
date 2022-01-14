@@ -22,11 +22,10 @@ const createModule = async (req, res) => {
   const course = await Course.findById(req.body.courseId);
   if (!course) return res.status(400).send("Invalid course.");
 
-  const module = new Module(
-    _.pick(req.body, ["title", "subtitle", "imageUri", "fileUri"])
-  );
+  const module = new Module(_.pick(req.body, ["title", "subtitle", "fileUri"]));
 
   module.course = req.body.courseId;
+  module.imageUri = course.imageUri;
 
   await module.save();
 
@@ -53,7 +52,7 @@ const updateModule = async (req, res) => {
 
   const module = await Module.findByIdAndUpdate(
     id,
-    { $set: _.pick(req.body, ["title", "subtitle", "questions"]) },
+    { $set: _.pick(req.body, ["title", "content", "questions"]) },
     { new: true }
   ).populate("course");
 
