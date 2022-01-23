@@ -34,7 +34,9 @@ const createModule = async (req, res) => {
 
 const getModules = async (req, res) => {
   const modules = await Module.find({ course: req.params.courseId });
-  const course = await Course.findById(req.params.courseId).select("title");
+  const course = await Course.findById(req.params.courseId).select(
+    "title imageUri groupLink"
+  );
   res.send({ course, modules });
 };
 

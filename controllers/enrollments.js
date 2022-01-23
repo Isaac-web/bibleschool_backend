@@ -23,9 +23,7 @@ const createEnrollment = async (req, res) => {
   const firstModule = await Module.findOne({ course: course._id });
 
   if (!firstModule)
-    return res.status(400).send("Cannot enroll in this course.");
-
-  // console.log("It is working...", firstModule);
+    return res.status(400).send("Could not enroll in the course.");
 
   const enrollment = new Enrollment({
     user: req.body.userId,

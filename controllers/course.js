@@ -3,6 +3,7 @@ const { Course, validate } = require("../models/Course");
 const { Enrollment } = require("../models/Enrollment");
 const { Module } = require("../models/Module");
 const { User } = require("../models/User");
+const Joi = require("joi");
 
 const createCourse = async (req, res) => {
   const { error } = validate(req.body);
@@ -52,13 +53,45 @@ const getCourse = async (req, res) => {
 };
 
 const updateCourse = async (req, res) => {
-  const { error } = validate(req.body);
+  const { error } = updateValidationSchema(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const course = await Course.updateOne(
+  if (req.body.coordinator) {
+    const course = await Course.findById(req.params.id);
+    if (!course) return res.status(404).send("Course not found.");
+
+    const user = await User.findByIdAndUpdate(course.coordinator, {
+      $set: {
+        status: "normal",
+      },
+      $unset: {
+        courseId: null,
+      },
+    });
+
+    if (!user) return req.status(404).send("User not found.");
+  }
+
+  await User.findByIdAndUpdate(
+    req.body.coordinator,
+    {
+      $set: {
+        status: "coordinator",
+        courseId: req.params.id,
+      },
+    },
+    { new: true }
+  );
+
+  const course = await Course.findByIdAndUpdate(
     req.params.id,
     {
-      $set: _.pick(req.body, ["title", "imageUri", "coordinator"]),
+      $set: _.pick(req.body, [
+        "title",
+        "coordinator",
+        "groupLink",
+        "description",
+      ]),
     },
     { new: true }
   ).populate("coordinator", "firstname lastname status");
@@ -87,6 +120,18 @@ const deleteCourse = async (req, res) => {
   if (!course) res.status(404).send("Course not found.");
 
   res.send(course);
+};
+
+const updateValidationSchema = (course) => {
+  const schema = Joi.object({
+    title: Joi.string().min(3).max(100).required(),
+    image: Joi.string(),
+    coordinator: Joi.string(),
+    groupLink: Joi.string().min(0),
+    description: Joi.string().max(500),
+  });
+
+  return schema.validate(course);
 };
 
 module.exports.createCourse = createCourse;

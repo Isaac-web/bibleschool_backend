@@ -20,6 +20,16 @@ const Course = mongoose.model(
       ref: "User",
       required: true,
     },
+    groupLink: {
+      type: String,
+      default: "",
+    },
+    description: {
+      type: String,
+      min: 0,
+      max: 500,
+      default: "",
+    },
     enrollments: {
       type: Number,
       min: 0,
