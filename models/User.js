@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    minlength: 7,
+    minlength: 3,
     maxlength: 150,
     trim: true,
   },
