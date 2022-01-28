@@ -71,7 +71,10 @@ userSchema.methods.generateAuthToken = function () {
       email: this.email,
       name: `${this.firstname} ${this.lastname}`,
     },
-    privateKey
+    privateKey,
+    {
+      expiresIn: process.env.app_jwt_Expires_In,
+    }
   );
 };
 
