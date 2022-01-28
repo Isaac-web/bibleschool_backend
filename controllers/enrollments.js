@@ -17,6 +17,16 @@ const createEnrollment = async (req, res) => {
     user: req.body.userId,
   });
 
+  const uncompletedEnrollments = await Enrollment.find({
+    user: req.body.userId,
+    status: "inprogress",
+  });
+
+  if (uncompletedEnrollments.length >= 2)
+    return res
+      .status(400)
+      .send("Complete your current enrollments to enroll in a new course.");
+
   if (existingEnrollment)
     return res.status(400).send("You are already enrolled in this course.");
 
