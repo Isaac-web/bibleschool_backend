@@ -47,7 +47,7 @@ const router = express.Router();
 
 router.post("/", [coordinator], asyncMiddleware(createModule));
 router.get("/download/", asyncMiddleware(downloadModule));
-router.get("/all/:courseId", [auth], asyncMiddleware(getModules));
+router.get("/all/:courseId", asyncMiddleware(getModules));
 router.get("/:id", [auth], asyncMiddleware(getModule));
 router.patch(
   "/upload/:id",
